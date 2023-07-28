@@ -1,0 +1,26 @@
+SELECT case 
+WHEN ambito_de_prestacion = 'H' THEN 'Hospitalario'
+WHEN ambito_de_prestacion = 'A' THEN 'Ambulatorio'
+WHEN ambito_de_prestacion = 'U' THEN 'Urgencias'
+WHEN ambito_de_prestacion = 'D' THEN 'Domiciliario'
+END AS ambito_prestacion,
+--cuota_moderadora
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'C' , cast(cuota_moderadora as decimal))) cuota_mod_capitacion_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'C' , cast(cuota_moderadora as decimal))) cuota_mod_capitacion_2023,
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'S' , cast(cuota_moderadora as decimal))) cuota_mod_evento_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'S' , cast(cuota_moderadora as decimal))) cuota_mod_evento_2023,
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'P' , cast(cuota_moderadora as decimal))) cuota_mod_Paquete_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'P' , cast(cuota_moderadora as decimal))) cuota_mod_Paquete_2023,
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'A' , cast(cuota_moderadora as decimal))) cuota_mod_Autorizado_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'A' , cast(cuota_moderadora as decimal))) cuota_mod_Autorizado_2023,
+--Copago
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'C' , cast(copago as decimal))) copago_capitacion_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'C' , cast(copago as decimal))) copago_capitacion_2023,
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'S' , cast(copago as decimal))) copago_evento_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'S' , cast(copago as decimal))) copago_evento_2023,
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'P' , cast(copago as decimal))) copago_Paquete_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'P' , cast(copago as decimal))) copago_Paquete_2023,
+sum(IF(CORTE in ('20220630') and forma_de_reconocimiento_y_pago = 'A' , cast(copago as decimal))) copago_Autorizado_2022,
+sum(IF(CORTE in ('20230630') and forma_de_reconocimiento_y_pago = 'A' , cast(copago as decimal))) copago_Autorizado_2023
+FROM coosalud_etl.suficiencia__trimestral
+group by ambito_de_prestacion
