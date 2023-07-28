@@ -1,0 +1,17 @@
+SELECT case 
+WHEN ambito_de_prestacion = 'H' THEN 'Hospitalario'
+WHEN ambito_de_prestacion = 'A' THEN 'Ambulatorio'
+WHEN ambito_de_prestacion = 'U' THEN 'Urgencias'
+WHEN ambito_de_prestacion = 'D' THEN 'Domiciliario'
+END AS ambito_prestacion,
+--cuota_moderadora
+sum(IF(CORTE in ('20220630') , cast(cuota_moderadora as decimal))) cuota_mod_2022,
+sum(IF(CORTE in ('20230630') , cast(cuota_moderadora as decimal))) cuota_mod_2023,
+--Copago
+sum(IF(CORTE in ('20220630') , cast(copago as decimal))) copago_2022,
+sum(IF(CORTE in ('20230630') , cast(copago as decimal))) copago_2023,
+--valor_facturado
+sum(IF(CORTE in ('20220630') , cast(valor as decimal))) Valor_facturado_2022,
+sum(IF(CORTE in ('20230630') , cast(valor as decimal))) Valor_facturado_2023
+FROM coosalud_etl.suficiencia__trimestral
+group by ambito_de_prestacion;
