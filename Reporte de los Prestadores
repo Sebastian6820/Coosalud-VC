@@ -9,11 +9,15 @@ coalesce(divipola,ips_divipola) divipola,
 coalesce(departamento_afiliado,departamento_ips) departamento,
 coalesce(municipio_afiliado,municipio_ips) municipio,
 condicion_medica,
+servicio,
+tipo_de_servicio,
+servicio_desc,
+inclusion,
 count () registros,
 count ( distinct cuenta_afiliado) personas,
 sum (cast(cantidad as decimal))  cantidad,
 sum (cast(valor_factura as decimal)) valor_total
 from nota_tecnica.micro
 where year(fecha_ingreso) in (2022,2023)
-and ips_nit in ('900769549')
-group by 1,2,3,5,6,7,8,9,10
+and ips_nit in ('891409291')
+group by 1,2,3,5,6,7,8,9,10,11,12,13,14;
