@@ -18,7 +18,10 @@ with t1 as (
     ips_nombre,
     componente_disponible,
     CONDICION_MEDICA_DX AS AGRUPACION_POR_DX,
-    agrupacion_de_servicios,
+        CASE
+        WHEN TIPO_DE_SERVICIO IS NULL AND AGRUPACION_DE_SERVICIOS = '13. Insumos y/o Dispositivos' THEN 'Insumo o dispositivo' 
+        ELSE TIPO_DE_SERVICIO 
+    END AS TIPO_DE_SERV,
     SERVICIO,
     servicio_desc,
     sum(VALOR_DETALLE) as VALOR_DETALLE,
@@ -30,4 +33,4 @@ from VP_INFORMACION.NT.MICRO
 where fecha_ingreso_anno IN ('2023','2024')
 --and municipio_afiliado = 'Achí'
 group by all
-) select sum(iff(VALIDACION = 'Válido',VALOR_DETALLE,valor2)) AS valor_Homologado  from t1
+) select *, iff(VALIDACION = 'Válido',VALOR_DETALLE,valor2) AS valor_Homologado  from t1 
