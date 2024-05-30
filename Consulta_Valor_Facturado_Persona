@@ -1,0 +1,33 @@
+with t1 as (
+    select
+    FECHA_INGRESO_ANNO,
+    fecha_ingreso_mes,
+    tipo_identificacion,
+    numero_identificacion,
+    tipo_identificacion||'-'||numero_identificacion as llave,
+    FACTURA,
+    SEXO,
+    EDAD,
+    GRUPO_ETARIO,
+    regimen,
+    coalesce(MUNICIPIO_AFILIADO, MUNICIPIO_IPS) as Municipio_AFIL,
+    coalesce(MUNICIPIO_IPS, MUNICIPIO_IPS) as Municipio_IPS,
+    coalesce(DEPARTAMENTO_IPS, DEPARTAMENTO_AFILIADO) as Departamento_IP,       
+    coalesce(DEPARTAMENTO_AFILIADO, DEPARTAMENTO_IPS) AS DEPARTAMENTO_AFI,
+    divipola,
+    ips_nombre,
+    componente_disponible,
+    CONDICION_MEDICA_DX AS AGRUPACION_POR_DX,
+    agrupacion_de_servicios,
+    SERVICIO,
+    servicio_desc,
+    sum(VALOR_DETALLE) as VALOR_DETALLE,
+    iff(valor_detalle>VALOR_TOTAL_FACTURA,1,0) as validacion_detalle,
+    iff(max(validacion_detalle)=1,'Se_debe_validar','Válido') AS VALIDACION,
+    iff(valor_detalle>valor_total_factura,valor_factura,valor_detalle) AS valor2,
+    valor_detalle-valor_total_factura AS diff
+from VP_INFORMACION.NT.MICRO
+where fecha_ingreso_anno IN ('2023','2024')
+--and municipio_afiliado = 'Achí'
+group by all
+) select sum(iff(VALIDACION = 'Válido',VALOR_DETALLE,valor2)) AS valor_Homologado  from t1
