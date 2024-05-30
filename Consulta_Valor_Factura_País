@@ -1,0 +1,20 @@
+with t1 as (
+select 
+FECHA_INGRESO_ANNO,
+fecha_ingreso_mes,
+count(distinct id_persona) AS PERSONAS,
+regimen,
+coalesce(MUNICIPIO_AFILIADO, MUNICIPIO_IPS) as Municipio_AFIL,
+coalesce(MUNICIPIO_IPS, MUNICIPIO_IPS) as Municipio_IPS,
+coalesce(DEPARTAMENTO_IPS, DEPARTAMENTO_AFILIADO) as Departamento_IP, coalesce(DEPARTAMENTO_AFILIADO, DEPARTAMENTO_IPS) AS DEPARTAMENTO_AFI,
+divipola,
+ips_nombre,
+componente_disponible,
+agrupacion_de_servicios,
+CONDICION_MEDICA_DX AS AGRUPACION_POR_DX,
+sum(valor_factura) as valor_factura
+from VP_INFORMACION.NT.MICRO
+where fecha_ingreso_anno IN ('2023','2024')
+--and municipio_afiliado = 'Achí'
+group by all
+)select sum(valor_factura) from t1
