@@ -1,0 +1,60 @@
+with t2 as (
+WITH T1 AS (
+  select
+    A.FECHA_INGRESO_ANNO,
+    A.fecha_ingreso_mes,
+    A.tipo_identificacion,
+    A.numero_identificacion,
+    a.id_persona,
+    A.tipo_identificacion||'-'||A.numero_identificacion as llave,
+    a.id_episodio,
+    A.AMBITO_EP,
+    A.SEXO,
+    A.EDAD,
+    A.regimen,
+    coalesce(A.MUNICIPIO_AFILIADO, A.MUNICIPIO_IPS) as Municipio_AFIL,
+    coalesce(A.MUNICIPIO_IPS, A.MUNICIPIO_IPS) as Municipio_IPS,
+    coalesce(A.DEPARTAMENTO_IPS, A.DEPARTAMENTO_AFILIADO) as Departamento_IP,       
+    coalesce(A.DEPARTAMENTO_AFILIADO, A.DEPARTAMENTO_IPS) AS DEPARTAMENTO_AFI,
+    A.ips_nombre,
+    A.GRUPO_COMPONENTE_DISPONIBLE,
+    A.componente_disponible,
+    A.CONDICION_MEDICA_DX AS AGRUPACION_POR_DX,
+    A.EPISODIO_EP,
+    a.tipo_de_servicio,
+    sum(A.VALOR_DETALLE) as VALOR_DETALLE,
+    iff(A.valor_detalle>A.VALOR_TOTAL_FACTURA,1,0) as validacion_detalle,
+    iff(max(validacion_detalle)=1,'Se_debe_validar','Válido') AS VALIDACION,
+    iff(A.valor_detalle>A.valor_total_factura,A.valor_factura,A.valor_detalle) AS valor2,
+    iff(VALIDACION = 'Válido',sum(A.VALOR_DETALLE),valor2) AS valor_Homologad
+from VP_INFORMACION.NT.MICRO AS A
+where A.fecha_ingreso_anno IN ('2023')
+AND a.ambito_ep = 'A'
+--AND DEPARTAMENTO_AFI = 'VALLE DEL CAUCA'
+GROUP BY ALL
+) SELECT 
+DEPARTAMENTO_AFI,
+Departamento_IP,
+ips_nombre,
+componente_disponible,
+GRUPO_COMPONENTE_DISPONIBLE,
+EPISODIO_EP,
+AMBITO_EP,
+tipo_de_servicio,
+count(distinct id_persona) Cantidad_de_usuarios,
+sum(iff(fecha_ingreso_mes =1,valor_Homologad,0)) Facturado_Enero,
+sum(iff(fecha_ingreso_mes =2,valor_Homologad,0)) Facturado_Febrero ,
+sum(iff(fecha_ingreso_mes =3,valor_Homologad,0)) Facturado_Marzo ,
+sum(iff(fecha_ingreso_mes =4,valor_Homologad,0)) Facturado_Abril ,
+sum(iff(fecha_ingreso_mes =5,valor_Homologad,0)) Facturado_Mayo ,
+sum(iff(fecha_ingreso_mes =6,valor_Homologad,0)) Facturado_Junio ,
+sum(iff(fecha_ingreso_mes =7,valor_Homologad,0)) Facturado_Julio ,
+sum(iff(fecha_ingreso_mes =8,valor_Homologad,0)) Facturado_Agosto ,
+sum(iff(fecha_ingreso_mes =9,valor_Homologad,0)) Facturado_Septiembre ,
+sum(iff(fecha_ingreso_mes =10,valor_Homologad,0)) Facturado_Octubre ,
+sum(iff(fecha_ingreso_mes =11,valor_Homologad,0)) Facturado_Noviembre ,
+sum(iff(fecha_ingreso_mes =12,valor_Homologad,0)) Facturado_Diciembre ,
+sum(valor_homologad) Valor_Total
+FROM T1 
+GROUP BY all
+) select count(*) from t2
