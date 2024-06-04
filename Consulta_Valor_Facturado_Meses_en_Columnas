@@ -12,6 +12,8 @@ WITH T1 AS (
     A.SEXO,
     A.EDAD,
     A.regimen,
+    a.cantidad,
+    a.modalidad_agrupada,
     coalesce(A.MUNICIPIO_AFILIADO, A.MUNICIPIO_IPS) as Municipio_AFIL,
     coalesce(A.MUNICIPIO_IPS, A.MUNICIPIO_IPS) as Municipio_IPS,
     coalesce(A.DEPARTAMENTO_IPS, A.DEPARTAMENTO_AFILIADO) as Departamento_IP,       
@@ -23,6 +25,8 @@ WITH T1 AS (
     A.EPISODIO_EP,
     a.tipo_de_servicio,
     a.servicio_desc,
+    a.servicio_grupo,
+    a.agrupacion_de_servicios,
     a.factura,
     sum(A.VALOR_DETALLE) as VALOR_DETALLE,
     iff(A.valor_detalle>A.VALOR_TOTAL_FACTURA,1,0) as validacion_detalle,
@@ -34,24 +38,23 @@ from VP_INFORMACION.NT.MICRO AS A
 where A.fecha_ingreso_anno IN ('2023')
 AND A.DEPARTAMENTO_AFILIADO IN ('BOYACÁ')
 --AND A.GRUPO_COMPONENTE_DISPONIBLE IN ()
---AND a.ambito_ep = 'A'
+--AND a.ambito_ep = 'H'
 GROUP BY ALL
 ) SELECT 
 DEPARTAMENTO_AFI AS Departamento_del_afiliado,
 Municipio_AFIL AS Municipio_del_Afiliado,
+LLAVE Tipo_y_Numero_Documento,
+ips_nit,
+ips_nombre AS Ips_de_Atencion,
 Departamento_IP AS  Departamento_de_atencion,
 Municipio_IPS AS Municipio_de_atencion,
-ips_nombre AS Ips_de_Atencion,
-ips_nit,
-componente_disponible,
+componente_disponible ,
 GRUPO_COMPONENTE_DISPONIBLE,
 EPISODIO_EP Episodio,
-COUNT (DISTINCT id_episodio) Cantidad_de_Episodios,
-LLAVE Tipo_y_Numero_Documento,
-tipo_de_servicio,
+agrupacion_de_servicios,
+cantidad,
 AMBITO_EP Ambito,
-servicio_desc,
-factura,
+modalidad_agrupada,
 sum(iff(fecha_ingreso_mes =1,valor_Homologad,0)) Facturado_Enero,
 sum(iff(fecha_ingreso_mes =2,valor_Homologad,0)) Facturado_Febrero ,
 sum(iff(fecha_ingreso_mes =3,valor_Homologad,0)) Facturado_Marzo ,
@@ -67,6 +70,6 @@ sum(iff(fecha_ingreso_mes =12,valor_Homologad,0)) Facturado_Diciembre ,
 sum(valor_homologad) Valor_Total_2023
 FROM T1 
 GROUP BY all
-) select COUNT(*)
+) select *
 from t2
 where Valor_Total_2023 > 0
