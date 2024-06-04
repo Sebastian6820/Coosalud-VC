@@ -22,26 +22,36 @@ WITH T1 AS (
     A.CONDICION_MEDICA_DX AS AGRUPACION_POR_DX,
     A.EPISODIO_EP,
     a.tipo_de_servicio,
+    a.servicio_desc,
+    a.factura,
     sum(A.VALOR_DETALLE) as VALOR_DETALLE,
     iff(A.valor_detalle>A.VALOR_TOTAL_FACTURA,1,0) as validacion_detalle,
     iff(max(validacion_detalle)=1,'Se_debe_validar','Válido') AS VALIDACION,
     iff(A.valor_detalle>A.valor_total_factura,A.valor_factura,A.valor_detalle) AS valor2,
-    iff(VALIDACION = 'Válido',sum(A.VALOR_DETALLE),valor2) AS valor_Homologad
+    iff(VALIDACION = 'Válido',sum(A.VALOR_DETALLE),valor2) AS valor_Homologad,
+    a.ips_nit,
 from VP_INFORMACION.NT.MICRO AS A
 where A.fecha_ingreso_anno IN ('2023')
-AND a.ambito_ep = 'A'
---AND DEPARTAMENTO_AFI = 'VALLE DEL CAUCA'
+AND A.DEPARTAMENTO_AFILIADO IN ('BOYACÁ')
+--AND A.GRUPO_COMPONENTE_DISPONIBLE IN ()
+--AND a.ambito_ep = 'A'
 GROUP BY ALL
 ) SELECT 
-DEPARTAMENTO_AFI,
-Departamento_IP,
-ips_nombre,
+DEPARTAMENTO_AFI AS Departamento_del_afiliado,
+Municipio_AFIL AS Municipio_del_Afiliado,
+Departamento_IP AS  Departamento_de_atencion,
+Municipio_IPS AS Municipio_de_atencion,
+ips_nombre AS Ips_de_Atencion,
+ips_nit,
 componente_disponible,
 GRUPO_COMPONENTE_DISPONIBLE,
-EPISODIO_EP,
-AMBITO_EP,
+EPISODIO_EP Episodio,
+COUNT (DISTINCT id_episodio) Cantidad_de_Episodios,
+LLAVE Tipo_y_Numero_Documento,
 tipo_de_servicio,
-count(distinct id_persona) Cantidad_de_usuarios,
+AMBITO_EP Ambito,
+servicio_desc,
+factura,
 sum(iff(fecha_ingreso_mes =1,valor_Homologad,0)) Facturado_Enero,
 sum(iff(fecha_ingreso_mes =2,valor_Homologad,0)) Facturado_Febrero ,
 sum(iff(fecha_ingreso_mes =3,valor_Homologad,0)) Facturado_Marzo ,
@@ -54,7 +64,9 @@ sum(iff(fecha_ingreso_mes =9,valor_Homologad,0)) Facturado_Septiembre ,
 sum(iff(fecha_ingreso_mes =10,valor_Homologad,0)) Facturado_Octubre ,
 sum(iff(fecha_ingreso_mes =11,valor_Homologad,0)) Facturado_Noviembre ,
 sum(iff(fecha_ingreso_mes =12,valor_Homologad,0)) Facturado_Diciembre ,
-sum(valor_homologad) Valor_Total
+sum(valor_homologad) Valor_Total_2023
 FROM T1 
 GROUP BY all
-) select count(*) from t2
+) select COUNT(*)
+from t2
+where Valor_Total_2023 > 0
