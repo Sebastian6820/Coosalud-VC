@@ -1,0 +1,14 @@
+with t1 as (
+Select 
+SUCURSAL,
+DEPARTAMENTONOMBRE AS Departament,
+MUNICIPIONOMBRE as Municipio,
+divipola,
+count(distinct a.serial_bdua) TOTALES,
+COUNT (DISTINCT IFF(COD_EPS IN ('EPS042','ESSC24'),a.serial_bdua,NULL)) CONTRIBUTIVO,
+COUNT (DISTINCT IFF(COD_EPS IN ('EPSS42','ESS024'),a.serial_bdua,NULL)) SUBSIDIADO
+from DWH_PRODUCCION.ASEGURAMIENTO.V_HISTORICO_ADRES_DBUA  as a
+left join DWH_PRODUCCION.MAESTRAS.M_MUNICIPIOS_DIVIPOLA as b on b.divipola = a.departamento||a.ciudad
+where a.estado in ('AC','PL') and corte_bdua = '20240729'
+group by all
+)select sum(TOTALES) from t1
