@@ -49,3 +49,39 @@ ON A.NIT_PROVEEDOR || '-' || A.NO_SUBFACTURA || '-' || A.NO_CARNET =
    B.NITPRESTADOR || '-' || B.subfactura || '-' || B.CARNET
    group by all;
  ;
+
+
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.OBSERVACIONES IS 'OBSERVACIONES A QUE HAYA LUGAR EN EL MOMENTO DE LA CONCILIACIÓN O DEPURACIÓN DE CARTERA ';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.VALIDACION IS 'Se realiza la operación matemática para verificar que se tiene totalmente identificado el valor total de la factura';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.CXP_CONTRIBUTIVO IS 'Se diligencia el valor de la Cuenta por Pagar disponible del regimen contributivo despues de lso descuentos.';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.CXP_SUBSIDIADO IS 'Se diligencia el valor de la Cuenta por Pagar disponible del regimen subsidiado despues de lso descuentos.';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.MAYORES_VALORES_PAGADOS IS 'se diligencian los mayores valores pagados a cada factura';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FECHA_LEGALIZACION_ANTICIPOS IS 'diligenciar la o las fechas de las legalizaciones de pago ';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.LEGALIZACION_DE_ANTICIPOS_MEDICOS IS 'diligenciar los valores legalizados asociados a anticipos';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FECHA_DE_PAGO IS 'Diligenciar la o las fechas de pago de la factura ';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.PAGOS_REALIZADOS IS 'Diligenciar los pagos aplicados por tesorería o por giro directo directamente a la factura';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FECHA_NOTA_DEBITO IS 'Diligenciar la fecha de aplicación de las notas debito ';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.NOTAS_DEBITO IS 'diligenciar los valores de las notas debito aplicadas a la factura diferentes de las glosas';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.IMPUESTOS_APLICADOS IS 'Diligenciar los impuestos aplicados a la factura';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.GLOSA_PENDIENTE_DE_CONCILIAR IS 'Si la glosa inicial no ha sido conciliada de manera total o parcial, diligenciar en este campo el valor pendiente por conciliar ';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.GLOSA_ACEPTADA_EPS IS 'si la glosa inicial fue conciliada y la EPS acepto algun valor se diligencia en este campo';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.VALOR_GLOSA_ACEPTADA_IPS IS 'si la glosa inicial fue conciliada y la IPS acepto algun valor se diligencia en este campo';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.VALOR_GLOSA_INICIAL IS 'Se diligencia el valor de la glosa inicial aplicada en el proceso de auditoría';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.CUOTAS_MODERADORAS IS 'Corresponde Al Valor Pagado Por El Afiliado A La Ips Relacionado En La Factura';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.COPAGOS IS 'Corresponde Al Valor Pagado Por El Afiliado A La Ips Relacionado En La Factura';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.DIFERENCIAS_EN_VALOR IS 'Si la factura presenta diferencia entre lo reclamado y lo radicado, poner el valor de diferencia en este campo, puede ser positivo o negativo según sea el caso';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FACTURAS_PENDIENTES_DE_INTERFASE IS 'Si la factura ya cuenta con certificación por parte del operador de radicación pero aun no esta reconocida en el sistema financiero se pone el valor total de la factura en este campo';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FACTURAS_EN_PROCESO IS 'Si la factura no esta aun auditada y certificada pero si se evidencia radicación y esta sin estado se pone el valor total en este campo';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FACTURAS_DEVUELTAS IS 'si la factura fue devuelta se pone el valor total de la factura en este campo';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FACTURA_NO_RADICADA IS 'Si la factura no se encuentra en el sistema de radicación se pone el valor total en este campo';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.SI_RED_NO_RED IS 'si esta contratado o no ';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.TIPO_CONTRATO IS 'capita, pgp, modelo, evento etc';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.REGIMEN IS 'contributivo o subsidiado';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FECHA_RADICADION_OPERADOR IS 'Fecha de radicación de la factura en el aplicativo de radicación';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.NRO_RADICADO_OPERADOR IS 'si existe un numero de identificación de la radicación de la factura en el operador de radicación ';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.TOTAL_VALOR_RADICADO IS 'Valor de la factura en radicación';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.PREFIJO_Y_FACTURA_PRESTADOR IS 'concatenado de prefijo y numero de factura del prestador';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.FACTURA_PRESTADOR IS 'numero de factura del prestador';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.PREFIJO IS 'prefijo de la factura del prestador';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.NOMBRE_PROVEEDOR IS 'Razon Social Proveedor';
+COMMENT ON COLUMN DWH_PRODUCCION.FINANCIERA.S_DEPURACION_CARTERA.NIT_PROVEEDOR IS 'Nit Proveedor';
